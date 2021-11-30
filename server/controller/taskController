@@ -1,0 +1,76 @@
+const {TaskModel} = require( '../models/taskModel.js' );
+
+
+const TaskController ={
+    allTasks: function(request, response){
+        TaskModel.findAll()
+        .then(data => response.json(data))
+        .catch(err => response.json(err));
+    },
+
+
+    seeTask: function(request, response){
+        // console.log("The mongoose id requested is: ", request.params._id);
+        let id = request.params._id;
+        console.log("id llega al controlador?", id);
+        TaskModel.findTask(id)
+        .then(data => response.json(data))
+        .catch(err => response.json(err));
+        
+    },
+
+    createTask: function(request, response){
+        // console.log("The mongoose id requested is: ", request.params._id);
+        let title = request.body.title;
+        let description = request.body.description;
+        let completed = request.body.completed;
+        // let updated_at=Date;
+        // let created_at=Date;
+        createdTask = {
+            title,
+            description,
+            completed,
+            // updated_at,
+            // created_at
+        };
+        TaskModel.save(createdTask)
+        .then(data => response.json(data))
+        .catch(err => response.json(err));
+        
+    },
+
+    updateTask: function(request, response){
+        let id = request.params._id;
+        let title= request.body.title;
+        let description = request.body.description;
+        let completed = request.body.completed;
+        let updated_at=Date;
+        updatedTask = {
+            title,
+            description,
+            completed,
+            // updated_at
+        };
+        console.log(id);
+        TaskModel.findandUpdate(updatedTask, id)
+        .then(data => response.json(data))
+        .catch(err => response.json(err));
+
+    },
+
+    removeTask: function(request, response){
+        // console.log("The mongoose id requested is: ", request.params._id);
+        let id = request.params._id;
+        TaskModel.delete(id)
+        .then(data => response.json(data))
+        .catch(err => response.json(err));
+        
+    },
+
+
+}
+
+
+module.exports = {
+    TaskController
+};
